@@ -6,19 +6,21 @@ public class Main {
         //creating the game field
         char[][] gameField = createEmptyBoard();
         printBoard(gameField);
+        System.out.println();
 
         //input ship coordinates - start and end points of the ship
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the coordinates of the ship:");
         String input = scanner.nextLine();
         String[] coordinates = input.split(" ");
-        String start = coordinates[0];
-        String end = coordinates[1];
 
         //validating the input - two coordinates are needed; basic error checking
         if (coordinates.length != 2) {
             System.out.println("Error!");
         }
+
+        String start = coordinates[0];
+        String end = coordinates[1];
 
         //coordinates parsing (converting input strings into numeric coordinates)
         int[] startCoords = parseCoordinates(start);
@@ -27,13 +29,13 @@ public class Main {
         //validating the input - two coordinates are needed; basic error checking
         if (startCoords == null || endCoords == null) {
             System.out.println("Error!");
+            return;
         }
 
         //validate if the ship is in same row or column
-        assert startCoords != null;
-        assert endCoords != null;
         if (!isValidShipPlacement(startCoords, endCoords)) {
             System.out.println("Error!");
+            return;
         }
 
         //calculate ship length
@@ -44,9 +46,9 @@ public class Main {
 
         //output ship length and parts
         System.out.println("Length: " + length);
-        System.out.printf("Parts: ");
+        System.out.print("Parts: ");
         for (String part : shipParts) {
-            System.out.printf(part + " ");
+            System.out.print(part + " ");
         }
     }
 
@@ -114,7 +116,7 @@ public class Main {
             //using Math.abs for always positive difference between values
             return Math.abs(startCoords[1] - endCoords[1]) + 1; //horizontal ship
         } else {
-            return Math.abs(startCoords[0] - endCoords[0] + 1); //vertical ship
+            return Math.abs(startCoords[0] - endCoords[0]) + 1; //vertical ship
         }
     }
 
@@ -126,16 +128,14 @@ public class Main {
             int startCol = Math.min(startCoords[1], endCoords[1]); //user coordinates input either way
             //generating horizontal ship:
             for (int i = 0; i < length; i++) {
-                parts[i] = (char) ('A' + row) //converting row index to corresponding letter
-                        + String.valueOf(startCol + i + 1);
+                parts[i] = (char) ('A' + row) + String.valueOf(startCol + i + 1);
             }
         } else { //ship is vertical
             int col = startCoords[1]; //storing column index
             int startRow = Math.min(startCoords[0], endCoords[0]);
             //generating vertical ship:
             for (int i = 0; i < length; i++) {
-                parts[i] = (char) ('A' + startRow + i) //calculate row letter for each part
-                        + String.valueOf(col + 1); //column number for each part
+                parts[i] = (char) ('A' + startRow + i) + String.valueOf(col + 1); //column number for each part
             }
 
         }
